@@ -5,16 +5,52 @@ import DropdownCategory from "../dropdownCategory/DropdownCategory";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { useToast } from "@/hooks/use-toast";
+import { CircleCheckBigIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useDispatch, useSelector } from "react-redux";
+import { setIsOpen } from "@/redux/app/slice";
 
 export default function FormProduct({ defaultValues }) {
+  const { toast } = useToast();
+  const dispatch = useDispatch();
+  const { type } = useSelector((state) => state.app);
+
   const {
     handleSubmit,
     control,
     formState: { errors },
+    reset,
   } = useForm({ defaultValues });
+  console.log(defaultValues, "default values");
 
-  const onSubmit = (val) => {
-    console.log(val, "value");
+  const toastText = () => {
+    if (type === "update") {
+      return "success updated product";
+    }
+    return "success created product";
+  };
+
+  const onSubmit = async (val) => {
+    try {
+      console.log(val, "value");
+      dispatch(setIsOpen(false));
+      reset();
+      toast({
+        variant: "success",
+        description: (
+          <div className='flex gap-2 font-bold'>
+            <CircleCheckBigIcon className='text-green-600' />
+            <p>{toastText()}</p>
+          </div>
+        ),
+        className: cn(
+          "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4"
+        ),
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
