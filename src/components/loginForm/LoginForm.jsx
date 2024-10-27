@@ -25,7 +25,7 @@ export default function LoginForm() {
     try {
       const body = { input: val.input, password: val.password };
       await login(body).unwrap();
-      navigate("/verify-success");
+      navigate("/");
     } catch (err) {
       console.error("Error saat login:", err);
     }

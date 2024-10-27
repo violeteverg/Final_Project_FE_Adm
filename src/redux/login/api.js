@@ -5,15 +5,12 @@ export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
     baseUrl,
-    prepareHeaders: (headers) => {
-      return headers;
-    },
     credentials: "include",
   }),
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (body) => ({
-        url: "/login",
+        url: "/admin-login",
         method: "POST",
         body,
       }),
@@ -23,6 +20,12 @@ export const authApi = createApi({
         url: "/register",
         method: "POST",
         body,
+      }),
+    }),
+    logout: builder.mutation({
+      query: () => ({
+        url: "/logout",
+        method: "POST",
       }),
     }),
     forgetPassword: builder.mutation({
@@ -45,6 +48,7 @@ export const authApi = createApi({
 export const {
   useLoginMutation,
   useRegisterMutation,
+  useLogoutMutation,
   useForgetPasswordMutation,
   useResetPasswordMutation,
 } = authApi;

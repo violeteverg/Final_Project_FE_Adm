@@ -1,26 +1,32 @@
-// src/login/loginSlice.js
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  user: null,
-  token: null,
-  isAuthenticated: false,
-  status: "idle",
-  error: null,
+  isOpen: false,
+  isDelete: false,
+  productId: 0,
+  type: "create",
 };
 
-const loginSlice = createSlice({
-  name: "login",
+const appSlice = createSlice({
+  name: "app",
   initialState,
   reducers: {
-    logout: (state) => {
-      state.user = null;
-      state.token = null;
-      state.isAuthenticated = false;
+    setIsOpen: (state, action) => {
+      state.isOpen = action.payload;
+    },
+    setIsDelete: (state, action) => {
+      state.isDelete = action.payload;
+    },
+    setProductId: (state, action) => {
+      state.productId = action.payload;
+    },
+    setType: (state, action) => {
+      state.type = action.payload;
     },
   },
 });
 
-export const { logout } = loginSlice.actions;
+export const { setIsOpen, setIsDelete, setProductId, setType } =
+  appSlice.actions;
 
-export default loginSlice.reducer;
+export default appSlice.reducer;

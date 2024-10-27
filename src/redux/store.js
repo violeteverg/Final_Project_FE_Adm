@@ -1,10 +1,10 @@
 // src/store.js
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { authApi } from "./login/api";
-import loginReducer from "./app/slice";
+import appReducer from "./app/slice";
 
 const rootReducer = combineReducers({
-  login: loginReducer,
+  app: appReducer,
   [authApi.reducerPath]: authApi.reducer,
 });
 
