@@ -11,7 +11,7 @@ import ResetPasswordPage from "./pages/_resetPasswordPage/ResetPasswordPage";
 import { Toaster } from "./components/ui/toaster";
 import LoginPage from "./pages/_loginPage/LoginPage";
 import { SidebarProvider } from "./components/ui/sidebar";
-import CreateProductPage from "./pages/_createProductPage/CreateProductPage";
+import ProductManagemnetPage from "./pages/_productManagementPage/ProductManagementPage";
 
 const router = createBrowserRouter([
   {
@@ -19,8 +19,8 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: "/create_product",
-        element: <CreateProductPage />,
+        path: "/product_management",
+        element: <ProductManagemnetPage />,
       },
     ],
   },

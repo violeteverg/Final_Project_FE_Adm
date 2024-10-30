@@ -3,12 +3,26 @@ import { cn } from "@/lib/utils";
 import { Eye, EyeOff } from "lucide-react";
 
 const Input = React.forwardRef(
-  ({ className, type, isPassword, ...props }, ref) => {
+  ({ className, type, isPassword, isToggle, ...props }, ref) => {
     const [showPassword, setShowPassword] = React.useState(false);
 
     const togglePasswordVisibility = () => {
       setShowPassword((prev) => !prev);
     };
+
+    if (isToggle) {
+      return (
+        <input
+          type='checkbox'
+          className={cn(
+            "absolute left-1/2 -translate-x-1/2 w-full h-full peer appearance-none rounded-md",
+            className
+          )}
+          ref={ref}
+          {...props}
+        />
+      );
+    }
 
     return (
       <div className='relative'>

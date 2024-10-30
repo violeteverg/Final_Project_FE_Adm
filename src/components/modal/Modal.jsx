@@ -8,32 +8,37 @@ import {
   DialogTitle,
 } from "../ui/dialog";
 import { setIsOpen } from "@/redux/app/slice";
-import mockProducts from "@/lib/mock/dummyProduct";
+import { useGetProductIdQuery } from "@/redux/product/api";
 
 export default function Modal() {
   const dispatch = useDispatch();
   const { isOpen, productId, type } = useSelector((state) => state.app);
+  const { data, isLoading } = useGetProductIdQuery({ id: productId });
+  const product = data?.result || [];
 
-  const product = mockProducts.find((item) => item.id === productId);
+  // console.log(product, "ini product");
 
   const defaultValues =
     product && type === "update"
       ? {
-          title: product.title || "",
-          description: product.description || "",
-          price: product.price || 0,
-          quantity: product.quantity || 0,
-          image: product.image || "",
-          categoryId: product.categoryId || null,
+          id: product?.id || 0,
+          title: product?.title || "",
+          description: product?.description || "",
+          price: product?.price || 0,
+          quantity: product?.quantity || 0,
+          image: product?.image || "",
+          categoryId: product?.categoryId || null,
         }
       : {};
+
   const handleOpen = () => {
     dispatch(setIsOpen(true));
   };
-  console.log("Modal:", { type, productId });
+
   const handleClose = () => {
     dispatch(setIsOpen(false));
   };
+
   return (
     <Dialog
       open={isOpen}
@@ -48,11 +53,12 @@ export default function Modal() {
             {type === "create" ? "." : "Please update product carefully"}
           </DialogDescription>
         </DialogHeader>
-        <FormProduct defaultValues={defaultValues} />
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : (
+          <FormProduct defaultValues={defaultValues} />
+        )}
       </DialogContent>
     </Dialog>
   );
 }
-
-//todo-list:
-//get and default values in here

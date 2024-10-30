@@ -3,7 +3,7 @@ import { ChartColumnIncreasing, Home } from "lucide-react";
 export const NavItems = [
   {
     title: "Home",
-    url: "/create_product",
+    url: "/product_management",
     icon: Home,
   },
   {

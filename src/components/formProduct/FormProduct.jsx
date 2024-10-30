@@ -10,6 +10,10 @@ import { CircleCheckBigIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsOpen } from "@/redux/app/slice";
+import {
+  useCreateProductMutation,
+  useUpdateProductMutation,
+} from "@/redux/product/api";
 
 export default function FormProduct({ defaultValues }) {
   const { toast } = useToast();
@@ -22,7 +26,9 @@ export default function FormProduct({ defaultValues }) {
     formState: { errors },
     reset,
   } = useForm({ defaultValues });
-  console.log(defaultValues, "default values");
+  // console.log(defaultValues, "ini default values");
+  const [updateProduct] = useUpdateProductMutation();
+  const [createProduct] = useCreateProductMutation();
 
   const toastText = () => {
     if (type === "update") {
@@ -31,9 +37,57 @@ export default function FormProduct({ defaultValues }) {
     return "success created product";
   };
 
-  const onSubmit = async (val) => {
+  // const onSubmit = async (val, e) => {
+  //   try {
+  //     e.preventDefault();
+  //     // console.log(val, "value");
+  //     if (type === "update") {
+  //       await updateProduct({ data: val, id: val?.id });
+  //     } else {
+  //       await createProduct(val);
+  //       console.log(val.image, "ini value");
+  //     }
+  //     dispatch(setIsOpen(false));
+  //     reset();
+  //     toast({
+  //       variant: "success",
+  //       description: (
+  //         <div className='flex gap-2 font-bold'>
+  //           <CircleCheckBigIcon className='text-green-600' />
+  //           <p>{toastText()}</p>
+  //         </div>
+  //       ),
+  //       className: cn(
+  //         "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4"
+  //       ),
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  const onSubmit = async (val, e) => {
     try {
-      console.log(val, "value");
+      e.preventDefault();
+
+      const formData = new FormData();
+      formData.append("title", val.title);
+      formData.append("price", val.price);
+      formData.append("quantity", val.quantity);
+      formData.append("categoryId", val.categoryId);
+      formData.append("description", val.description);
+
+      if (val.image && val.image.length > 0) {
+        formData.append("image", val.image[0]);
+      } else {
+        console.error("No image file selected");
+      }
+
+      if (type === "update") {
+        await updateProduct({ data: formData, id: val.id });
+      } else {
+        await createProduct(formData);
+      }
+
       dispatch(setIsOpen(false));
       reset();
       toast({
@@ -49,7 +103,7 @@ export default function FormProduct({ defaultValues }) {
         ),
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -129,10 +183,18 @@ export default function FormProduct({ defaultValues }) {
         <Controller
           control={control}
           name='image'
-          render={({ field: { onChange, value } }) => (
-            <Input onChange={onChange} value={value} placeholder='Image URL' />
+          render={({ field: { onChange } }) => (
+            <Input
+              type='file'
+              accept='image/*'
+              onChange={(e) => {
+                const files = e.target.files;
+                onChange(files);
+              }}
+            />
           )}
         />
+
         {errors.image && <p>{errors.image.message}</p>}
       </div>
 
@@ -164,6 +226,3 @@ export default function FormProduct({ defaultValues }) {
     </form>
   );
 }
-
-//todo-list:
-// bedakan sumbit data nantinya ketika create denga update

@@ -1,21 +1,31 @@
 import Navbar from "@/components/navbar/Navbar";
 import { Button } from "@/components/ui/button";
-
 import {
   setProductId,
   setIsOpen,
   setType,
   setIsDelete,
+  setCheckboxValue,
 } from "@/redux/app/slice";
 import DataTable from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "@/components/modal/Modal";
 import DeleteProduct from "@/components/deleteProduct/deleteProduct";
-import mockProducts from "@/lib/mock/dummyProduct";
+// import mockProducts from "@/lib/mock/dummyProduct";
+import { useGetProductQuery } from "@/redux/product/api";
+import { useMemo } from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
-export default function CreateProductPage() {
+export default function ProductManagemnetPage() {
   const dispatch = useDispatch();
   const { isOpen, isDelete } = useSelector((state) => state.app);
+  const { data } = useGetProductQuery();
+  console.log(data, "ini adalah data product");
+
+  const products = useMemo(() => {
+    return data?.result || [];
+  }, [data]);
 
   const buttonUpdateHandler = (id) => {
     dispatch(setProductId(id));
@@ -26,33 +36,54 @@ export default function CreateProductPage() {
     dispatch(setIsOpen(true));
     dispatch(setType("create"));
   };
-  const deleteHandler = (id) => {
-    console.log(id, "<>");
+
+  const checkboxhandler = (id, value) => {
+    dispatch(setProductId(id));
     dispatch(setIsDelete(true));
+    dispatch(setCheckboxValue({ isActive: value }));
   };
 
   const columns = [
     {
-      name: "id",
-      selector: (row) => row.id,
+      name: "No",
+      selector: (row, index) => index + 1,
       sortable: true,
     },
     {
-      name: "title",
+      name: "Title",
       selector: (row) => row.title,
       sortable: true,
     },
     {
-      name: "price",
+      name: "Price",
       selector: (row) => row.price,
     },
     {
-      name: "quantity",
+      name: "Quantity",
       selector: (row) => row.quantity,
     },
     {
+      name: "Active",
+      cell: (row) => {
+        return (
+          <Label className='relative flex justify-between items-center py-2 text-xl'>
+            <Input
+              type='checkbox'
+              isToggle={true}
+              checked={row.isActive}
+              onChange={(e) => checkboxhandler(row.id, e.target.checked)}
+            />
+            <span
+              className='w-14 h-8 flex items-center flex-shrink-0  p-1 bg-gray-300 rounded-full duration-300 ease-in-out peer-checked:bg-green-400 
+                after:w-6 after:h-6 after:bg-white after:rounded-full after:shadow-md after:duration-300 peer-checked:after:translate-x-6 group-hover:after:translate-x-1'
+            ></span>
+          </Label>
+        );
+      },
+    },
+    {
       name: "Action",
-      selector: (row) => {
+      cell: (row) => {
         return (
           <div className='flex gap-2'>
             <Button
@@ -60,12 +91,6 @@ export default function CreateProductPage() {
               onClick={() => buttonUpdateHandler(row.id)}
             >
               update
-            </Button>
-            <Button
-              className='bg-red-300'
-              onClick={() => deleteHandler(row.id)}
-            >
-              Delete
             </Button>
           </div>
         );
@@ -89,10 +114,10 @@ export default function CreateProductPage() {
           <div className='border '>
             <DataTable
               columns={columns}
-              data={mockProducts}
+              data={products}
               fixedHeader
               fixedHeaderScrollHeight='450px'
-              selectableRows
+              responsive={true}
               pagination
             />
           </div>
