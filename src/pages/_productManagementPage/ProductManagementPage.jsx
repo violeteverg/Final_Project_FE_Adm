@@ -21,10 +21,10 @@ export default function ProductManagemnetPage() {
   const dispatch = useDispatch();
   const { isOpen, isDelete } = useSelector((state) => state.app);
   const { data } = useGetProductQuery();
-  console.log(data, "ini adalah data product");
+  console.log(data?.result, "ini adalah data product");
 
   const products = useMemo(() => {
-    return data?.result || [];
+    return data ? data?.result : [];
   }, [data]);
 
   const buttonUpdateHandler = (id) => {
@@ -71,7 +71,7 @@ export default function ProductManagemnetPage() {
               type='checkbox'
               isToggle={true}
               checked={row.isActive}
-              onChange={(e) => checkboxhandler(row.id, e.target.checked)}
+              onChange={(e) => checkboxhandler(row.id, e?.target?.checked)}
             />
             <span
               className='w-14 h-8 flex items-center flex-shrink-0  p-1 bg-gray-300 rounded-full duration-300 ease-in-out peer-checked:bg-green-400 
@@ -114,7 +114,7 @@ export default function ProductManagemnetPage() {
           <div className='border '>
             <DataTable
               columns={columns}
-              data={products}
+              data={products?.data}
               fixedHeader
               fixedHeaderScrollHeight='450px'
               responsive={true}
