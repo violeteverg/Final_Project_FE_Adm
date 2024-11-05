@@ -18,7 +18,7 @@ export const getJwtSecretKey = () => {
 };
 
 export const checkToken = async () => {
-  const token = Cookies.get("token");
+  const token = Cookies.get("_lgnTkn");
 
   if (!token) {
     return null;
