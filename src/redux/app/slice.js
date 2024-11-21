@@ -6,6 +6,9 @@ const initialState = {
   productId: 0,
   type: "create",
   checkboxValue: { isActive: false },
+  user: null,
+  page: 1,
+  limit: 10,
 };
 
 const appSlice = createSlice({
@@ -27,6 +30,15 @@ const appSlice = createSlice({
     setCheckboxValue: (state, action) => {
       state.checkboxValue = { isActive: action.payload.isActive };
     },
+    setUser: (state, action) => {
+      state.user = action.payload;
+    },
+    setPage: (state, action) => {
+      state.page = action.payload;
+    },
+    setLimit: (state, action) => {
+      state.limit = action.payload;
+    },
   },
 });
 
@@ -36,6 +48,9 @@ export const {
   setProductId,
   setType,
   setCheckboxValue,
+  setPage,
+  setLimit,
+  setUser,
 } = appSlice.actions;
 
 export default appSlice.reducer;

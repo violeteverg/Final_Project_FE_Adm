@@ -18,7 +18,7 @@ export const getJwtSecretKey = () => {
 };
 
 export const checkToken = async () => {
-  const token = Cookies.get("_lgnTkn");
+  const token = Cookies.get("token");
 
   if (!token) {
     return null;
@@ -33,6 +33,30 @@ export const checkToken = async () => {
     return payload.name;
   } catch (error) {
     console.error("Gagal memverifikasi token:", error);
+    return null;
+  }
+};
+
+export const getUser = async () => {
+  try {
+    const token = Cookies.get("token");
+
+    if (!token) {
+      return null;
+    }
+
+    const { payload } = await jwtVerify(
+      token,
+      new TextEncoder().encode(getJwtSecretKey())
+    );
+    console.log(payload, "ini payloadnya");
+    return {
+      id: payload?.id,
+      userName: payload?.userValue?.userName,
+      email: payload?.userValue?.email,
+    };
+  } catch (error) {
+    console.error("Failed to get user:", error);
     return null;
   }
 };

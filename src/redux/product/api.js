@@ -18,9 +18,12 @@ export const productApi = createApi({
       invalidatesTags: ["PRODUCT_LIST"],
     }),
     getProduct: builder.query({
-      query: () => ({
-        url: "/findAll",
-      }),
+      query: ({ page, limit }) => {
+        console.log(page, limit);
+        return {
+          url: `/findAll?page=${page}&limit=${limit}`,
+        };
+      },
       transformResponse: (response) => {
         return response;
       },

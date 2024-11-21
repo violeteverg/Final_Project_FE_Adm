@@ -16,8 +16,6 @@ export default function Modal() {
   const { data, isLoading } = useGetProductIdQuery({ id: productId });
   const product = data?.result || [];
 
-  // console.log(product, "ini product");
-
   const defaultValues =
     product && type === "update"
       ? {

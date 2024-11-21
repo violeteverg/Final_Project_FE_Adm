@@ -18,16 +18,17 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { NavItems } from "@/lib/mock/NavMenuItem";
-
-import { useLogoutMutation } from "@/redux/login/api";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import Cookies from "js-cookie";
 
 export default function SideNavbar() {
   const navigate = useNavigate();
-  const [logout] = useLogoutMutation();
+  const { user } = useSelector((state) => state.app);
+
   const buttonLogoutHandler = async () => {
-    await logout().unwrap();
+    Cookies.remove("token");
     navigate(0);
   };
   return (
@@ -62,7 +63,8 @@ export default function SideNavbar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton>
-                  <User2 /> Username
+                  <User2 />
+                  {user?.userName}
                   <ChevronUp className='ml-auto' />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>

@@ -25,8 +25,8 @@ export default function FormProduct({ defaultValues }) {
     control,
     formState: { errors },
     reset,
-  } = useForm({ defaultValues });
-  // console.log(defaultValues, "ini default values");
+  } = useForm({ defaultValues: defaultValues, mode: "onchange" });
+
   const [updateProduct] = useUpdateProductMutation();
   const [createProduct] = useCreateProductMutation();
 
@@ -37,34 +37,6 @@ export default function FormProduct({ defaultValues }) {
     return "success created product";
   };
 
-  // const onSubmit = async (val, e) => {
-  //   try {
-  //     e.preventDefault();
-  //     // console.log(val, "value");
-  //     if (type === "update") {
-  //       await updateProduct({ data: val, id: val?.id });
-  //     } else {
-  //       await createProduct(val);
-  //       console.log(val.image, "ini value");
-  //     }
-  //     dispatch(setIsOpen(false));
-  //     reset();
-  //     toast({
-  //       variant: "success",
-  //       description: (
-  //         <div className='flex gap-2 font-bold'>
-  //           <CircleCheckBigIcon className='text-green-600' />
-  //           <p>{toastText()}</p>
-  //         </div>
-  //       ),
-  //       className: cn(
-  //         "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4"
-  //       ),
-  //     });
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
   const onSubmit = async (val, e) => {
     try {
       e.preventDefault();
@@ -183,16 +155,19 @@ export default function FormProduct({ defaultValues }) {
         <Controller
           control={control}
           name='image'
-          render={({ field: { onChange } }) => (
-            <Input
-              type='file'
-              accept='image/*'
-              onChange={(e) => {
-                const files = e.target.files;
-                onChange(files);
-              }}
-            />
-          )}
+          render={({ field: { onChange, value } }) => {
+            console.log(value, "ini valuenya");
+            return (
+              <Input
+                type='file'
+                accept='image/*'
+                onChange={(e) => {
+                  const files = e.target.files;
+                  onChange(files || value);
+                }}
+              />
+            );
+          }}
         />
 
         {errors.image && <p>{errors.image.message}</p>}
@@ -209,18 +184,6 @@ export default function FormProduct({ defaultValues }) {
         />
         {errors.categoryId && <p>{errors.categoryId.message}</p>}
       </div>
-
-      {/* <div className='grid gap-2'>
-        <Label>Discount</Label>
-        <Controller
-          control={control}
-          name='discountId'
-          render={({ field: { onChange, value } }) => (
-            <DropdownDiscount value={value} onChange={onChange} />
-          )}
-        />
-        {errors.discountId && <p>{errors.discountId.message}</p>}
-      </div> */}
 
       <Button type='submit'>Save changes</Button>
     </form>

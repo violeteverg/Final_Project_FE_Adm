@@ -6,12 +6,13 @@ import {
   setType,
   setIsDelete,
   setCheckboxValue,
+  setPage,
+  setLimit,
 } from "@/redux/app/slice";
 import DataTable from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "@/components/modal/Modal";
 import DeleteProduct from "@/components/deleteProduct/deleteProduct";
-// import mockProducts from "@/lib/mock/dummyProduct";
 import { useGetProductQuery } from "@/redux/product/api";
 import { useMemo } from "react";
 import { Input } from "@/components/ui/input";
@@ -19,13 +20,22 @@ import { Label } from "@/components/ui/label";
 
 export default function ProductManagemnetPage() {
   const dispatch = useDispatch();
-  const { isOpen, isDelete } = useSelector((state) => state.app);
-  const { data } = useGetProductQuery();
-  console.log(data?.result, "ini adalah data product");
+  const { isOpen, isDelete, page, limit } = useSelector((state) => state.app);
+  const { data, isLoading, isFetching } = useGetProductQuery({ page, limit });
+  const totalData = data?.result?.pagination;
+  const loading = isLoading || isFetching;
 
   const products = useMemo(() => {
     return data ? data?.result : [];
   }, [data]);
+
+  const handlePageChange = (page) => {
+    dispatch(setPage(page));
+  };
+
+  const handleLimitChange = (limit) => {
+    dispatch(setLimit(limit));
+  };
 
   const buttonUpdateHandler = (id) => {
     dispatch(setProductId(id));
@@ -113,12 +123,17 @@ export default function ProductManagemnetPage() {
           </Button>
           <div className='border '>
             <DataTable
+              progressPending={loading}
               columns={columns}
               data={products?.data}
               fixedHeader
               fixedHeaderScrollHeight='450px'
               responsive={true}
               pagination
+              paginationServer
+              paginationTotalRows={totalData?.totalItems}
+              onChangePage={handlePageChange}
+              onChangeRowsPerPage={handleLimitChange}
             />
           </div>
         </div>

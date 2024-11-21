@@ -8,6 +8,7 @@ import { useLoginMutation } from "@/redux/login/api";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Link, useNavigate } from "react-router-dom";
 import { loginSchema } from "@/schemas/SchemasLoginForm";
+import Cookies from "js-cookie";
 
 export default function LoginForm() {
   const navigate = useNavigate();
@@ -24,8 +25,9 @@ export default function LoginForm() {
   const onSubmit = async (val) => {
     try {
       const body = { input: val.input, password: val.password };
-      await login(body).unwrap();
-      navigate("/");
+      const response = await login(body).unwrap();
+      Cookies.set("token", response?.user?.token);
+      navigate("/product_management");
     } catch (err) {
       console.error("Error saat login:", err);
     }
