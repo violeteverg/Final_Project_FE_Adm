@@ -1,5 +1,4 @@
-import { ArrowRight } from "lucide-react";
-import { Button, buttonVariants } from "../ui/button";
+import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { useForm } from "react-hook-form";
@@ -39,16 +38,6 @@ export default function LoginForm() {
         <div className='mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[360px]'>
           <div className='flex flex-col space-y-2 text-center'>
             <h1 className='text-2xl font-bold'>Login</h1>
-            <Link
-              to='/Register'
-              className={buttonVariants({
-                variant: "link",
-                className: "gap-1.5",
-              })}
-            >
-              New to the site? Sign up now.
-              <ArrowRight className='h-4 w-4' />
-            </Link>
           </div>
           <div className='grid gap-6'>
             <form onSubmit={handleSubmit(onSubmit)}>

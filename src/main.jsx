@@ -12,6 +12,7 @@ import { Toaster } from "./components/ui/toaster";
 import LoginPage from "./pages/_loginPage/LoginPage";
 import { SidebarProvider } from "./components/ui/sidebar";
 import ProductManagemnetPage from "./pages/_productManagementPage/ProductManagementPage";
+import OrderManagemnetPage from "./pages/_orderManagementPage/OrderManagementPage";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
       {
         path: "/product_management",
         element: <ProductManagemnetPage />,
+      },
+      {
+        path: "/order_management",
+        element: <OrderManagemnetPage />,
       },
     ],
   },
