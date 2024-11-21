@@ -18,10 +18,10 @@ export const productApi = createApi({
       invalidatesTags: ["PRODUCT_LIST"],
     }),
     getProduct: builder.query({
-      query: ({ page, limit }) => {
+      query: ({ page, limit, search }) => {
         console.log(page, limit);
         return {
-          url: `/findAll?page=${page}&limit=${limit}`,
+          url: `/findAll?page=${page}&limit=${limit}&search=${search}`,
         };
       },
       transformResponse: (response) => {

@@ -14,14 +14,22 @@ import { useDispatch, useSelector } from "react-redux";
 import Modal from "@/components/modal/Modal";
 import DeleteProduct from "@/components/deleteProduct/deleteProduct";
 import { useGetProductQuery } from "@/redux/product/api";
-import { useMemo } from "react";
+import { useDeferredValue, useMemo, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Search } from "lucide-react";
 
 export default function ProductManagemnetPage() {
   const dispatch = useDispatch();
   const { isOpen, isDelete, page, limit } = useSelector((state) => state.app);
-  const { data, isLoading, isFetching } = useGetProductQuery({ page, limit });
+  const [searchTerm, setSearchTerm] = useState("");
+  const searchDebounced = useDeferredValue(searchTerm, { timeoutMs: 500 });
+
+  const { data, isLoading, isFetching } = useGetProductQuery({
+    page,
+    limit,
+    search: searchDebounced,
+  });
   const totalData = data?.result?.pagination;
   const loading = isLoading || isFetching;
 
@@ -35,6 +43,9 @@ export default function ProductManagemnetPage() {
 
   const handleLimitChange = (limit) => {
     dispatch(setLimit(limit));
+  };
+  const handleInputChange = (e) => {
+    setSearchTerm(e.target.value);
   };
 
   const buttonUpdateHandler = (id) => {
@@ -115,12 +126,25 @@ export default function ProductManagemnetPage() {
 
         <div className='flex flex-col justify-center mx-4 my-8 space-y-4'>
           <h1 className='text-3xl font-semibold '>Product manajement</h1>
-          <Button
-            className='bg-green-700 text-white w-[30%] lg:w-[10%]'
-            onClick={buttonCreateHandler}
-          >
-            Create Product
-          </Button>
+          <div className='flex justify-between items-center'>
+            <Button
+              className='bg-green-700 text-white w-[30%] lg:w-[10%]'
+              onClick={buttonCreateHandler}
+            >
+              Create Product
+            </Button>
+            <div className='relative w-fit md:w-[500px] lg:w-[500px]'>
+              <Search className='absolute z-10 top-0 bottom-0 w-6 h-6 my-auto text-slate-800 left-3' />
+              <Input
+                type='text'
+                placeholder='Search Product'
+                className='pl-12 pr-4'
+                value={searchTerm}
+                onChange={handleInputChange}
+              />
+            </div>
+          </div>
+
           <div className='border '>
             <DataTable
               progressPending={loading}
