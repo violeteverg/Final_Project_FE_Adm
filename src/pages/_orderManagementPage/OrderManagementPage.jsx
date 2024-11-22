@@ -6,6 +6,7 @@ import { useDeferredValue, useMemo, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { useGetOrderQuery } from "@/redux/order/api";
+import ExpandedOrderItem from "@/components/expandedOrderItem/ExpandedOrderItem";
 
 export default function OrderManagemnetPage() {
   const dispatch = useDispatch();
@@ -25,8 +26,6 @@ export default function OrderManagemnetPage() {
     return data ? data?.result : [];
   }, [data]);
 
-  console.log(products, "ini product");
-
   const handlePageChange = (page) => {
     dispatch(setPage(page));
   };
@@ -41,8 +40,7 @@ export default function OrderManagemnetPage() {
   const columns = [
     {
       name: "No",
-      selector: (row, index) => index + 1,
-      sortable: true,
+      selector: (_, index) => (page - 1) * limit + index + 1,
     },
     {
       name: "Order Id",
@@ -61,6 +59,7 @@ export default function OrderManagemnetPage() {
     {
       name: "user",
       selector: (row) => row.User.fullName,
+      sortable: true,
     },
     {
       name: "total amount",
@@ -74,7 +73,7 @@ export default function OrderManagemnetPage() {
         <Navbar />
 
         <div className='flex flex-col justify-center mx-4 my-8 space-y-4'>
-          <h1 className='text-3xl font-semibold '>Order manajement</h1>
+          <h1 className='text-3xl font-semibold '>Order management</h1>
           <div className='flex justify-end items-center'>
             <div className='relative w-fit md:w-[500px] lg:w-[500px]'>
               <Search className='absolute z-10 top-0 bottom-0 w-6 h-6 my-auto text-slate-800 left-3' />
@@ -96,6 +95,8 @@ export default function OrderManagemnetPage() {
               fixedHeader
               fixedHeaderScrollHeight='450px'
               responsive={true}
+              expandableRows
+              expandableRowsComponent={ExpandedOrderItem}
               pagination
               paginationServer
               paginationTotalRows={totalData?.totalItems}

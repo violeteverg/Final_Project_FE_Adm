@@ -4,7 +4,7 @@ const baseUrl = "http://localhost:3000/api/order";
 
 export const orderApi = createApi({
   reducerPath: "orderApi",
-  tagTypes: ["ORDER_LIST"],
+  tagTypes: ["ORDER_LIST", "ORDER_ID"],
   baseQuery: fetchBaseQuery({
     baseUrl,
   }),
@@ -21,7 +21,18 @@ export const orderApi = createApi({
       },
       providesTags: ["ORDER_LIST"],
     }),
+    getOrderId: builder.query({
+      query: ({ id }) => ({
+        url: `/admin/findId/${id}`,
+        method: "GET",
+      }),
+      transformResponse: (response) => {
+        console.log(response.data, "ini response order id");
+        return response.data;
+      },
+      providesTags: ["ORDER_ID"],
+    }),
   }),
 });
 
-export const { useGetOrderQuery } = orderApi;
+export const { useGetOrderQuery, useGetOrderIdQuery } = orderApi;

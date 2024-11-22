@@ -125,7 +125,7 @@ export default function ProductManagemnetPage() {
         <Navbar />
 
         <div className='flex flex-col justify-center mx-4 my-8 space-y-4'>
-          <h1 className='text-3xl font-semibold '>Product manajement</h1>
+          <h1 className='text-3xl font-semibold '>Product management</h1>
           <div className='flex justify-between items-center'>
             <Button
               className='bg-green-700 text-white w-[30%] lg:w-[10%]'
