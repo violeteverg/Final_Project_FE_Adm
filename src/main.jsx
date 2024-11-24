@@ -13,12 +13,17 @@ import LoginPage from "./pages/_loginPage/LoginPage";
 import { SidebarProvider } from "./components/ui/sidebar";
 import ProductManagemnetPage from "./pages/_productManagementPage/ProductManagementPage";
 import OrderManagemnetPage from "./pages/_orderManagementPage/OrderManagementPage";
+import HomePage from "./pages/_homePage/HomePage";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     children: [
+      {
+        path: "/",
+        element: <HomePage />,
+      },
       {
         path: "/product_management",
         element: <ProductManagemnetPage />,

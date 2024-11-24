@@ -26,7 +26,7 @@ export default function LoginForm() {
       const body = { input: val.input, password: val.password };
       const response = await login(body).unwrap();
       Cookies.set("token", response?.user?.token);
-      navigate("/product_management");
+      navigate("/");
     } catch (err) {
       console.error("Error saat login:", err);
     }

@@ -1,19 +1,19 @@
-import { Box, ChartColumnIncreasing, Home } from "lucide-react";
+import { Box, Home, Package } from "lucide-react";
 
 export const NavItems = [
   {
     title: "Home",
-    url: "/product_management",
+    url: "/",
     icon: Home,
   },
   {
-    title: "Order",
-    url: "/order_management",
-    icon: Box,
+    title: "Product management",
+    url: "/product_management",
+    icon: Package,
   },
   {
-    title: "Chart",
-    url: "#",
-    icon: ChartColumnIncreasing,
+    title: "Order management",
+    url: "/order_management",
+    icon: Box,
   },
 ];

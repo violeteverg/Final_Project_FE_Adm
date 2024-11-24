@@ -60,3 +60,50 @@ export const getUser = async () => {
     return null;
   }
 };
+
+export function convertArrayOfObjectsToCSV(array) {
+  if (array.length === 0) return "";
+
+  let result = "";
+  const columnDelimiter = ",";
+  const lineDelimiter = "\n";
+  const keys = Object.keys(array[0]);
+
+  result += keys.join(columnDelimiter);
+  result += lineDelimiter;
+
+  array.forEach((item) => {
+    let ctr = 0;
+    keys.forEach((key) => {
+      if (ctr > 0) result += columnDelimiter;
+
+      let value = item[key];
+      if (typeof value === "object" && value !== null) {
+        // Handle nested objects (like User)
+        value = JSON.stringify(value);
+      }
+      result += value;
+
+      ctr++;
+    });
+    result += lineDelimiter;
+  });
+
+  return result;
+}
+
+export function downloadCSV(array) {
+  const link = document.createElement("a");
+  let csv = convertArrayOfObjectsToCSV(array);
+  if (csv == null) return;
+
+  const filename = "order_export.csv";
+
+  if (!csv.match(/^data:text\/csv/i)) {
+    csv = `data:text/csv;charset=utf-8,${csv}`;
+  }
+
+  link.setAttribute("href", encodeURI(csv));
+  link.setAttribute("download", filename);
+  link.click();
+}
