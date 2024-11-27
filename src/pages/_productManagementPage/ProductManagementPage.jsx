@@ -12,7 +12,7 @@ import {
 import DataTable from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "@/components/modal/Modal";
-import DeleteProduct from "@/components/deleteProduct/deleteProduct";
+import DeleteProduct from "@/components/deleteProduct/DeleteProduct";
 import { useGetProductQuery } from "@/redux/product/api";
 import { useDeferredValue, useMemo, useState } from "react";
 import { Input } from "@/components/ui/input";
