@@ -10,7 +10,7 @@ import { Search } from "lucide-react";
 import { useGetOrderQuery } from "@/redux/order/api";
 import ExpandedOrderItem from "@/components/expandedOrderItem/ExpandedOrderItem";
 import { Button } from "@/components/ui/button";
-import { downloadCSV } from "@/lib/utils";
+import { downloadCSV, formatDate } from "@/lib/utils";
 
 export default function OrderManagemnetPage() {
   const dispatch = useDispatch();
@@ -58,7 +58,7 @@ export default function OrderManagemnetPage() {
     },
     {
       name: "Order Date",
-      selector: (row) => row.orderDate,
+      selector: (row) => formatDate(row.orderDate),
       sortable: true,
     },
     {

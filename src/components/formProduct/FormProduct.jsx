@@ -27,9 +27,12 @@ export default function FormProduct({ defaultValues }) {
     reset,
   } = useForm({ defaultValues: defaultValues, mode: "onchange" });
 
-  const [updateProduct] = useUpdateProductMutation();
-  const [createProduct] = useCreateProductMutation();
+  const [updateProduct, { isLoading: updateLoading }] =
+    useUpdateProductMutation();
+  const [createProduct, { isLoading: createLoading }] =
+    useCreateProductMutation();
 
+  const loading = updateLoading || createLoading;
   const toastText = () => {
     if (type === "update") {
       return "success updated product";
@@ -185,7 +188,9 @@ export default function FormProduct({ defaultValues }) {
         {errors.categoryId && <p>{errors.categoryId.message}</p>}
       </div>
 
-      <Button type='submit'>Save changes</Button>
+      <Button disabled={loading} type='submit'>
+        {loading ? "Loading..." : "Save Change"}
+      </Button>
     </form>
   );
 }
