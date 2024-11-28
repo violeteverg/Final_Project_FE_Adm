@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react/prop-types */
 import Navbar from "@/components/navbar/Navbar";
 import { setPage, setLimit } from "@/redux/app/slice";
 import DataTable from "react-data-table-component";
@@ -42,10 +40,6 @@ export default function OrderManagemnetPage() {
   };
   console.log(products, "ini product");
 
-  const handleExport = () => {
-    downloadCSV(products?.data);
-  };
-
   const columns = [
     {
       name: "No",
@@ -75,16 +69,6 @@ export default function OrderManagemnetPage() {
       selector: (row) => row.totalAmount,
     },
   ];
-  const Export = ({ onExport }) => (
-    <Button
-      onClick={onExport}
-      className='bg-green-700 text-white w-[30%] lg:w-[10%]'
-    >
-      Export to CSV
-    </Button>
-  );
-
-  const actionsMemo = useMemo(() => <Export onExport={handleExport} />, []);
 
   return (
     <>
@@ -94,7 +78,12 @@ export default function OrderManagemnetPage() {
         <div className='flex flex-col justify-center mx-4 my-8 space-y-4'>
           <h1 className='text-3xl font-semibold '>Order management</h1>
           <div className='flex justify-between items-center'>
-            {actionsMemo}
+            <Button
+              onClick={() => downloadCSV(products?.data)}
+              className='bg-green-700 text-white w-[30%] lg:w-[10%]'
+            >
+              Export to CSV
+            </Button>
 
             <div className='relative w-fit md:w-[500px] lg:w-[500px]'>
               <Search className='absolute z-10 top-0 bottom-0 w-6 h-6 my-auto text-slate-800 left-3' />
